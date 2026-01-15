@@ -3,7 +3,9 @@ const Category = require("../models/categorySchema");
 const Order = require("../models/orderSchema");
 const User = require("../models/user");
 const Product = require("../models/productSchema");
+const Slider = require("../models/sliderSchema")
 const SendEmail = require("../utils/sendEmail");
+
 
 
 
@@ -383,6 +385,46 @@ const rejectProduct = async (req, res) => {
 };
 
 
+//admin slider api 
+
+ const getSliders = async (req, res) => {
+  try {
+    const sliders = await Slider.find({ isActive: true }).sort({ createdAt: -1 });
+    res.status(200).json(sliders);
+  } catch (error) {
+    console.log("Slider fetch error:", error);
+    res.status(500).json({ message: "Server Error" });
+  }
+};
+
+ const createSlider = async (req, res) => {
+  try {
+    const { link } = req.body;
+    const image = req.file ? `/uploads/${req.file.filename}` : null;
+
+    if (!image || !link) {
+      return res.status(400).json({ message: "Image and link required" });
+    }
+
+    const slider = await Slider.create({ image, link });
+    res.status(201).json(slider);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Server Error" });
+  }
+};
+
+const deleteSlider = async (req, res) => {
+  try {
+    const { id } = req.params;
+    await Slider.findByIdAndDelete(id);
+    res.status(200).json({ message: "Slider deleted successfully" });
+  } catch (error) {
+    console.log("Slider delete error:", error);
+    res.status(500).json({ message: "Server Error" });
+  }
+};
+
 
 module.exports = {
     handleallsellerRequests,
@@ -400,5 +442,8 @@ module.exports = {
   unApprovedProducts,
   approveProduct,
   rejectProduct,
+  getSliders,
+  createSlider,
+  deleteSlider,
 };
 

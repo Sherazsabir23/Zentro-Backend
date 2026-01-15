@@ -1,4 +1,5 @@
 const express = require("express");
+const upload = require("../utils/upload");
 const {
   handleallsellerRequests,
   handleAddCategory,
@@ -15,6 +16,9 @@ const {
   unApprovedProducts,
   approveProduct,
   rejectProduct,
+  getSliders,
+  createSlider,
+  deleteSlider,
 } = require("../controller/admin");
 const router = express.Router();
 const { jwtAuthMiddleware } = require("../middleware/authmiddleware");
@@ -34,5 +38,7 @@ router.get("/user/:id", getUserDetailsById);
 router.get("/admin/products/pending", unApprovedProducts);
 router.put("/admin/products/approve/:productId", approveProduct);
 router.delete("/admin/products/reject/:productId", rejectProduct);
-
+router.get("/sliders", getSliders);
+router.post("/sliders",upload.single("image"), createSlider);
+router.delete("/sliders/:id", deleteSlider);
 module.exports = router;
