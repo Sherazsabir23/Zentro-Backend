@@ -213,31 +213,57 @@ const updateOrderStatus = async(req,res)=>{
 
 const updatePaymentStatus = async (req, res) => {
   try {
-    const { id } = req.params;
+    const { id } = req.params; // order id
 
-    const order = await Order.findById(id);
-    
+    const order = await Order.findById(id).populate("items.product");
 
     if (!order)
+      return res.status(404).json({ success: false, message: "Order not found" });
+
+  
+    if (order.isCODSettled) {
       return res
-        .status(404)
-        .json({ success: false, message: "Order not found" });
+        .status(400)
+        .json({ success: false, message: "COD already settled" });
+    }
 
-        order.isCODSettled = true;
-        order.paymentStatus = "Paid";
+    
+    for (let item of order.items) {
+      const product = await Product.findById(item.product._id);
 
+      if (!product) {
+        return res.status(404).json({
+          success: false,
+          message: `Product not found: ${item.product.productname}`,
+        });
+      }
+
+      if (product.productstock < item.quantity) {
+        return res.status(400).json({
+          success: false,
+          message: `Not enough stock for ${product.productname}`,
+        });
+      }
+
+      product.productstock -= item.quantity; 
+      await product.save();
+    }
+
+    
+    order.isCODSettled = true;
+    order.paymentStatus = "Paid";
     await order.save();
 
-
-    res
-      .status(200)
-      .json({ success: true, message: "Payment status updated", order });
+    res.status(200).json({
+      success: true,
+      message: "COD settled and stock updated",
+      order,
+    });
   } catch (err) {
     console.error(err);
     res.status(500).json({ success: false, message: "Server error" });
   }
 };
-
 
 
 module.exports = {
