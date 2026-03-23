@@ -10,6 +10,7 @@ const {
   getSellerPaymentHistory,
   getSellerProfile,
   updateSellerProfile,
+  getSellerDetails,
 } = require("../controller/seller");
 const {
   featuredProducts,
@@ -61,6 +62,7 @@ router.get("/earnings-summary",jwtAuthMiddleware, getSellerEarningsSummary);
 router.get("/earnings-history",jwtAuthMiddleware, getSellerPaymentHistory);
 router.get("/seller/profile",jwtAuthMiddleware, getSellerProfile);
 router.put("/seller/profile",jwtAuthMiddleware, updateSellerProfile);
+router.get("/seller/:id", getSellerDetails);
 
 router.get("/checksellerrole", jwtAuthMiddleware, (req, res) => {
   if (req.user.role !== "seller") {

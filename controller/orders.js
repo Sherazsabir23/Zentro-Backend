@@ -1,4 +1,6 @@
 const Order = require("../models/orderSchema");
+const Product = require("../models/productSchema");
+
 const sellerApplication = require("../models/sellerSchema");
 
 const createOrder = async (req, res) => {

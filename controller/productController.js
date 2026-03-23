@@ -28,8 +28,11 @@ const productDetails = async (req, res) => {
   try {
     const product = await Product.findById(productId).populate(
       "reviews.user",
-      "name email"
-    );
+      "name email",
+      /* "seller.shopName", */
+    ).populate("seller", "shopName");
+
+    
     res.status(200).json({
       success: true,
       product,

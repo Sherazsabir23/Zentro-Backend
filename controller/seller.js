@@ -465,6 +465,27 @@ const updateSellerProfile = async (req, res) => {
   }
 };
 
+const getSellerDetails = async (req, res) => {
+  try {
+    const sellerId = req.params.id;
+
+    const seller = await sellerApplication.findById(sellerId).populate("userId","profileImage");
+
+    const products = await Product.find({ seller: sellerId });
+
+    res.status(200).json({
+      success: true,
+      seller,
+      products,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Server error",
+    });
+  }
+};
+
 
 module.exports = { handleSellerForm, handleApproved, handleReject,handleproductform,
   getDashboardMetrics,
@@ -473,4 +494,5 @@ module.exports = { handleSellerForm, handleApproved, handleReject,handleproductf
   getSellerPaymentHistory,
   getSellerProfile,
   updateSellerProfile,
+  getSellerDetails,
 };
