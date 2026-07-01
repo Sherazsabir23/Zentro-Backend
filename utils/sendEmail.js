@@ -7,6 +7,7 @@ const sendEmail = async (to, subject, html) => {
       user: process.env.EMAIL_USER, // your Gmail address
       pass: process.env.EMAIL_PASS, // 16-char App Password (no spaces)
     },
+   
   });
 
   await transporter.sendMail({

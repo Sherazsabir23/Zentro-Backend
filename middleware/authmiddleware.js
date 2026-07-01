@@ -1,7 +1,8 @@
 const jwt = require("jsonwebtoken");
+const User = require("../models/user");
 
 // Middleware to verify token
-const jwtAuthMiddleware = (req, res, next) => {
+const jwtAuthMiddleware = async (req, res, next) => {
   const token = req.cookies.token; // Token from cookies
 
   if (!token) {
@@ -9,9 +10,24 @@ const jwtAuthMiddleware = (req, res, next) => {
   }
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded; // Attach user payload to request
-    next();
+   const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+const user = await User.findById(decoded.id);
+
+if (!user) {
+  return res.status(401).json({
+    error: "User not found",
+  });
+}
+
+if (decoded.tokenVersion !== user.tokenVersion) {
+  return res.status(401).json({
+    error: "Session expired. Please login again.",
+  });
+}
+
+req.user = decoded;
+next();
   } catch (err) {
     console.log("JWT Error:", err.message);
     return res.status(401).json({ error: "Invalid or expired token" });
@@ -32,6 +48,10 @@ const generateToken = (userData) => {
 
 const authorizeRoles = (...roles) => {
   return (req, res, next) => {
+
+      console.log("Allowed:", roles);
+    console.log("Current User Role:", req.user.role);
+
     if (!roles.includes(req.user.role)) {
       return res.status(403).json({
         success: false,

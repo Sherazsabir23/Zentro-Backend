@@ -84,7 +84,8 @@ const isMatch = await bcrypt.compare(userPassword,user.password);
   const payload={
     id:user.id,
     email:user.email,
-    role:user.role
+    role:user.role,
+    tokenversion:user.tokenversion,
 
   }
 

@@ -58,6 +58,10 @@ watchedCategories: {
   default: [] // agar user ne koi category nahi dekhi to empty array
 },
 
+tokenversion:{
+  type:Number,
+  default:0
+},
 viewedPosts: [
   {
     type: mongoose.Schema.Types.ObjectId,

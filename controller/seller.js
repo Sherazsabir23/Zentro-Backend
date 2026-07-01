@@ -84,6 +84,7 @@ async function handleApproved(req, res) {
     }
 
     user.role = "seller";
+    user.tokenversion += 1
     await user.save();
 
    

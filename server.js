@@ -1,8 +1,11 @@
-const express = require("express");
+const dotenv = require("dotenv");
+dotenv.config();
+
 const mongoose = require("mongoose");
+const express = require("express");
 const app = express();
 const PORT = process.env.PORT || 3000;
-const dotenv = require("dotenv");
+
 const userRouter = require("./routes/user");
 const sellerRouter = require("./routes/seller");
 const adminRouter = require("./routes/admin")
@@ -11,7 +14,9 @@ const orderRouter = require("./routes/order");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const searchRouter = require("./routes/searchbarapi");
-dotenv.config();
+const dns = require("dns");
+
+dns.setServers(["1.1.1.1", "8.8.8.8"]);
 
 app.use(cors({
   origin: "http://localhost:5173",   // your frontend URL
