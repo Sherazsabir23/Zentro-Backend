@@ -23,6 +23,7 @@ app.use(cors({
   credentials: true                  // allow cookies / credentials
 }));
 
+
 app.use("/uploads", express.static("uploads"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -33,6 +34,13 @@ app.use("/api",adminRouter);
 app.use("/api",searchRouter);
 app.use("/api",cartRouter);
 app.use("/api",orderRouter);
+
+
+// Sirf normal text message show karne ke liye
+app.get("/", (req, res) => {
+  res.send("Zentro Backend is running perfectly! 🚀");
+});
+
 
 
 mongoose.connect(process.env.MONGO_URI)
