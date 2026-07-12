@@ -1,21 +1,20 @@
-const nodemailer = require("nodemailer");
+const { Resend } = require("resend");
 
-const sendEmail = async (to, subject, html) => {
-  const transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-      user: process.env.EMAIL_USER, // your Gmail address
-      pass: process.env.EMAIL_PASS, // 16-char App Password (no spaces)
-    },
-   
-  });
+const resend = new Resend(process.env.RESEND_API_KEY);
 
-  await transporter.sendMail({
-    from: `"Zentro" <${process.env.EMAIL_USER}>`,
+async function sendEmail(to, subject, html) {
+  const { data, error } = await resend.emails.send({
+    from: "onboarding@resend.dev", // Testing ke liye
     to,
     subject,
     html,
   });
-};
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return data;
+}
 
 module.exports = sendEmail;
