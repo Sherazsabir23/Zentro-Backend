@@ -91,10 +91,11 @@ const isMatch = await bcrypt.compare(userPassword,user.password);
 
   const token = generateToken(payload);
 
-    res.cookie("token", token, {
-  httpOnly: true,       // ✅ prevent JS access
-   secure: false,
-  sameSite: "lax",     // ✅ allow cross-site requests
+res.cookie("token", token, {
+  httpOnly: true,
+  secure: true,
+  sameSite: "none",
+  maxAge: 24 * 60 * 60 * 1000,
 });
 
 res.status(200).json({
