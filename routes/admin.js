@@ -41,4 +41,15 @@ router.delete("/admin/products/reject/:productId", rejectProduct);
 router.get("/sliders", getSliders);
 router.post("/sliders",upload.single("image"), createSlider);
 router.delete("/sliders/:id", deleteSlider);
+
+router.get("/checkadminrole", jwtAuthMiddleware, (req, res) => {
+  if (req.user.role !== "admin") {
+    return res
+      .status(403)
+      .json({ success: false, message: "Access denied. Not a admin." });
+  }
+  res
+    .status(200)
+    .json({ success: true, message: "Welcome seller!", user: req.user });
+});
 module.exports = router;
