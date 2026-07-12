@@ -4,7 +4,7 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 
 async function sendEmail(to, subject, html) {
   const { data, error } = await resend.emails.send({
-    from: "onboarding@resend.dev", // Testing ke liye
+   from: "Zentro <noreply@sherazsabir.site>", // Testing ke liye
     to,
     subject,
     html,
