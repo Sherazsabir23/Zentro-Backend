@@ -67,19 +67,31 @@ const {userEmail,userPassword} = req.body;
 
 const user  = await User.findOne({email:userEmail});
 
-if(!user.isVerified) {
-  return res.status(401).json({message:"please verify your email before logging", success:false, unverified:true,
-  })
+
+
+if (!user) {
+  return res.status(404).json({
+    success: false,
+    message: "First signup to login",
+  });
 }
-if(!user){
-    return res.status(404).json({success:false,message:"first signup to login"});
+
+if (!user.isVerified) {
+  return res.status(401).json({
+    success: false,
+    unverified: true,
+    message: "Please verify your email before logging in",
+  });
 }
- 
-    
-const isMatch = await bcrypt.compare(userPassword,user.password);
-  if(!isMatch){
-    return res.status(401).json({success:false,message:"invalid email or password"});
-  }
+
+const isMatch = await bcrypt.compare(userPassword, user.password);
+
+if (!isMatch) {
+  return res.status(401).json({
+    success: false,
+    message: "Invalid email or password",
+  });
+}
 
   const payload={
     id:user.id,
