@@ -20,7 +20,7 @@ if (!user) {
   });
 }
 
-if (decoded.tokenVersion !== user.tokenVersion) {
+if (decoded.tokenversion !== user.tokenversion) {
   return res.status(401).json({
     error: "Session expired. Please login again.",
   });
