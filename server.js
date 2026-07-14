@@ -19,7 +19,7 @@ const dns = require("dns");
 dns.setServers(["1.1.1.1", "8.8.8.8"]);
 
 app.use(cors({
-  origin: "http://localhost:5173",   // your frontend URL
+  origin: "https://zentro-frontend-acwj.vercel.app",   // your frontend URL
   credentials: true                  // allow cookies / credentials
 }));
 
