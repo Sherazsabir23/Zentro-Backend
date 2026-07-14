@@ -23,7 +23,7 @@ const {
 const router = express.Router();
 const { jwtAuthMiddleware } = require("../middleware/authmiddleware");
 
-router.get("/allcategories",jwtAuthMiddleware, getAllCategories);
+router.get("/allcategories", getAllCategories);
 router.post("/addcategory",jwtAuthMiddleware, handleAddCategory);
 router.delete("/deletecategory/:id", handleDeleteCategory);
 router.get("/allsellerRequests",jwtAuthMiddleware, handleallsellerRequests);
@@ -38,7 +38,7 @@ router.get("/user/:id",jwtAuthMiddleware, getUserDetailsById);
 router.get("/admin/products/pending",jwtAuthMiddleware, unApprovedProducts);
 router.put("/admin/products/approve/:productId", jwtAuthMiddleware,approveProduct);
 router.delete("/admin/products/reject/:productId", jwtAuthMiddleware,rejectProduct);
-router.get("/sliders",jwtAuthMiddleware, getSliders);
+router.get("/sliders", getSliders);
 router.post("/sliders",upload.single("image"), createSlider);
 router.delete("/sliders/:id",jwtAuthMiddleware, deleteSlider);
 
