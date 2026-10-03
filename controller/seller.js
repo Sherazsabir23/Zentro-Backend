@@ -146,9 +146,8 @@ async function handleReject(req, res) {
 
 
 
-  async function handleproductform(req, res) {
+async function handleproductform(req, res) {
   try {
-
     const {
       productname,
       productprice,
@@ -158,8 +157,9 @@ async function handleReject(req, res) {
       productdiscount
     } = req.body;
 
-    const productimages = req.files ? req.files.map((file) => `/uploads/${file.filename}`): [];
-
+    // YAHAN BADLAV KIYA HAI:
+    // Cloudinary har file ka direct full URL `file.path` me deta hai
+    const productimages = req.files ? req.files.map((file) => file.path) : [];
     
     // Find the seller application linked to the logged-in user
     const seller = await sellerApplication.findOne({ userId: req.user.id });
@@ -177,7 +177,7 @@ async function handleReject(req, res) {
       productstock,
       productdescription,
       productcategory,
-      productimages,
+      productimages, // Cloudinary URLs ki array save ho jayegi
       productdiscount
     });
 
@@ -191,6 +191,7 @@ async function handleReject(req, res) {
     res.status(500).json({ success: false, message: "Internal server error" });
   }
 }
+
 
 
 const getDashboardMetrics = async (req, res) => {

@@ -169,7 +169,7 @@ async function handleMe(req, res) {
  
 
 
- async function handleUserProfile(req, res) {
+async function handleUserProfile(req, res) {
   try {
     const { name, email, address, phone } = req.body;
     const id = req.params.id;
@@ -180,11 +180,12 @@ async function handleMe(req, res) {
     user.address = address;
     user.phone = phone;
 
+    // YAHAN BADLAV KIYA HAI:
     if (req.file) {
-      user.profileImage = `/uploads/${req.file.filename}`; 
+      user.profileImage = req.file.path; // Cloudinary ka poora direct URL save hoga
     }
 
-   const updatedUser =  await user.save();
+    const updatedUser = await user.save();
 
     res.status(200).json({
       success: true,

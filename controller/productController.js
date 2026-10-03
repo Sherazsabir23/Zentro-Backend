@@ -261,11 +261,12 @@ const updateSellerProduct = async (req, res) => {
     product.productstock = req.body.productstock || product.productstock;
     product.productdescription = req.body.productdescription || product.productdescription;
     product.productcategory = req.body.productcategory || product.productcategory;
-    product.productdiscount = req.body.productdiscount || product.productdiscount  ;
+    product.productdiscount = req.body.productdiscount || product.productdiscount;
 
-    // If new images uploaded
+    // BADLAV YAHAN KIYA HAI:
+    // If new images uploaded, Cloudinary links se array update hogi
     if (req.files && req.files.length > 0) {
-      const images = req.files.map(file => `/uploads/${file.filename}`);
+      const images = req.files.map(file => file.path);
       product.productimages = images;
     }
 
