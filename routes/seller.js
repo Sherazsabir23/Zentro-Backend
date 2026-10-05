@@ -36,14 +36,14 @@ router.delete("/handlereject/:id", handleReject);
 router.post(
   "/handleproductform",
   jwtAuthMiddleware,
-  upload.array("productimage", 5),
+  upload.array("productimages", 5),
   handleproductform
 );
 router.get("/seller-products", jwtAuthMiddleware, getSellerProducts);
 router.put(
   "/update-product/:id",
   jwtAuthMiddleware,
-  upload.array("productimage", 5),
+  upload.array("productimages", 5),
   updateSellerProduct
 );
 router.delete("/delete-product/:id", jwtAuthMiddleware, deleteProduct);
