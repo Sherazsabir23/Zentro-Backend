@@ -8,7 +8,7 @@ const featuredProducts = async (req, res) => {
     const products = await Product.aggregate([
       { $match: { isApproved: true } },
       { $sort: { createdAt: -1 } },
-      { $limit: 8 },
+      { $limit: 12 },
     ]); // only 8 featured
 
     res.status(200).json({
@@ -169,7 +169,7 @@ const productsForHomeController = async (req, res) => {
             _id: { $nin: viewedIds },
           },
         },
-        { $sample: { size: 5 } }, // max 5 products
+        { $sample: { size: 6 } }, // max 5 products
       ]);
     } else {
       // Logged-out: trending products
