@@ -175,7 +175,7 @@ const productsForHomeController = async (req, res) => {
       // Logged-out: trending products
       products = await Product.find({ isApproved: true })
         .sort({ averageRating: -1, createdAt: -1 })
-        .limit(10);
+        .limit(6);
     }
 
     res.status(200).json({ success: true, products });
