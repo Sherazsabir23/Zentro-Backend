@@ -5,7 +5,7 @@ const User = require("../models/user");
 const Product = require("../models/productSchema");
 const Slider = require("../models/sliderSchema")
 const SendEmail = require("../utils/sendEmail");
-
+ const cloudinary = require("cloudinary").v2;
 
 
 
@@ -387,7 +387,14 @@ const rejectProduct = async (req, res) => {
 
 //admin slider api 
 
- const getSliders = async (req, res) => {
+
+const getPublicId = (url) => {
+  if (!url || !url.includes("res.cloudinary.com")) return null;
+  const match = url.match(/\/upload\/(?:v\d+\/)?(.+)\.[^./]+$/);
+  return match ? decodeURIComponent(match[1]) : null;
+};
+
+const getSliders = async (req, res) => {
   try {
     const sliders = await Slider.find({ isActive: true }).sort({ createdAt: -1 });
     res.status(200).json(sliders);
@@ -397,10 +404,10 @@ const rejectProduct = async (req, res) => {
   }
 };
 
- const createSlider = async (req, res) => {
+const createSlider = async (req, res) => {
   try {
     const { link } = req.body;
-    const image = req.file ? `/uploads/${req.file.filename}` : null;
+    const image = req.file ? req.file.path : null;
 
     if (!image || !link) {
       return res.status(400).json({ message: "Image and link required" });
@@ -417,7 +424,18 @@ const rejectProduct = async (req, res) => {
 const deleteSlider = async (req, res) => {
   try {
     const { id } = req.params;
-    await Slider.findByIdAndDelete(id);
+
+    const slider = await Slider.findById(id);
+    if (!slider) {
+      return res.status(404).json({ message: "Slider not found" });
+    }
+
+    const publicId = getPublicId(slider.image);
+    if (publicId) {
+      await cloudinary.uploader.destroy(publicId);
+    }
+
+    await slider.deleteOne();
     res.status(200).json({ message: "Slider deleted successfully" });
   } catch (error) {
     console.log("Slider delete error:", error);
